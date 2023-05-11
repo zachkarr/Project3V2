@@ -1,6 +1,7 @@
 package disburse.controller;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import disburse.dao.HouseDisburseDAO;
@@ -62,7 +64,7 @@ public class HouseDisburseController {
 		hdDAO.saveAll(hdList);
 		return hdRepo.findAll();
 	}
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/highestAmount")
 	public @ResponseBody List<HouseDisburseDetail> getHighestAmount() {
 		return hdDAO.getHighestAmount();
@@ -106,6 +108,12 @@ public class HouseDisburseController {
 	@GetMapping("/createIncident") 
 	public String getIncidentPage() {
 		return "createIncident.html";
+	}
+
+	@GetMapping("/exportAllIncidents")
+	public ModelAndView exportToExcel() {
+		Map<String, Object>map = new HashMap<String, Object>();
+		return new ModelAndView("getExcelView", "map", map);
 	}
 }
 
